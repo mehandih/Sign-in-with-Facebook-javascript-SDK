@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+	<script>
+  		window.fbAsyncInit = function() {
+    		FB.init({
+      			appId      : '1736082853383409',
+     			xfbml      : true,
+      			version    : 'v2.8'
+    		});
+    		FB.getLoginStatus(function(response){
+    			if(response.status === 'connected'){
+    				document.getElementById('status').innerHTML = 'we are connected';
+    			} else if(response.status === 'not_authorized') {
+    				 document.getElementById('status').innerHTML = 'we are not logged in.'
+    			} else {
+    				document.getElementById('status').innerHTML = 'you are not logged in to Facebook';
+    			}
+    		});
+   		 FB.AppEvents.logPageView();
+ 	 	};
+
+  		(function(d, s, id){
+    		 var js, fjs = d.getElementsByTagName(s)[0];
+     		if (d.getElementById(id)) {return;}
+     		js = d.createElement(s); js.id = id;
+     		js.src = "//connect.facebook.net/en_US/sdk.js";
+     		fjs.parentNode.insertBefore(js, fjs);
+   		}(document, 'script', 'facebook-jssdk'));
+
+  		function login1(){
+  			FB.login(function(response){
+  				if(response.status === 'connected'){
+            
+            		document.getElementById('status').innerHTML = 'we are connected';
+    			} else if(response.status === 'not_authorized') {
+    				 document.getElementById('status').innerHTML = 'we are not logged in.'
+    			} else {
+    				document.getElementById('status').innerHTML = 'you are not logged in to Facebook';
+    			}
+
+  			});
+  		}
+
+
+      function login(){
+        FB.login(function(response){
+          if(response.status === 'connected'){
+            getInfo();
+            // checkForm(this);
+            document.getElementById('status').innerHTML = 'we are connected';
+            document.getElementById('status').style.visiblity = 'hidden';
+          } else if(response.status === 'not_authorized') {
+             document.getElementById('status').innerHTML = 'we are not logged in.'
+          } else {
+            document.getElementById('status').innerHTML = 'you are not logged in to Facebook';
+          }
+
+
+        });
+       
+      }
+  		// get user basic info
+
+  		function getInfo() {
+			FB.api('/me', 'GET', {fields: 'first_name,last_name,email,picture.with(350).height(250)'}, function(response) {
+				document.getElementById('first_name').value = response.first_name;
+        document.getElementById('last_name').value = response.last_name;
+        // alert(response.email);
+         document.getElementById('email').value = response.email;       
+        //document.getElementById('status').innerHTML = "<img src='" + response.picture.data.url+"'>";
+      });
+		}
+
+    function post(){
+      FB.api('/me/feed','post', {message:'Mehandi hassan status...'}, function(response){
+        document.getElementById('status').innerHTML = response.id;
+      })
+    }
+
+		function logout(){
+			FB.logout(function(response) {
+  				document.location.reload();
+  			});
+		}		
+
+</script>
+
+<script type="text/javascript">
+  function CheckPassword(inputtxt)   
+{   
+var paswd=  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;  
+if(inputtxt.value.match(paswd))   
+{   
+alert('Correct, try another...')  
+return true;  
+}  
+else  
+{   
+alert('Wrong...!')  
+return false;  
+}  
+}       
+</script>
+
+
+
+<body onload='document.form1.first_name.focus()'>
+<div id="container">
+<form name="form1" action="#"> 
+<h2 style="text-align: center;">Register</h2>
+<div id="status"></div>
+
+<p id="lable">First Name :<input type="text" name="first_name" id="first_name" placeholder="First Name"></br></p>
+<p id="lable">Last Name :<input type="text" name="last_name" id="last_name" placeholder="Last Name"></br></p>
+<p id="lable">Email :<input type="text" name="email" id="email" placeholder="Email"></br></p>
+
+<p id="lable">Password: <input type="password" style="margin-left: 70px;" name="pwd1" placeholder="password"></p>
+<p id="lable">Confirm Password: <input type="password" style="margin-left: 12px;" name="pwd2" placeholder="Re-password"></p>
+
+<!--<div id="pswd_info">
+    <h4 id="lable">Password must meet the following requirements:</h4>
+    <ul>
+        <li id="letter" class="invalid">At least <strong>one letter</strong></li>
+        <li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
+        <li id="number" class="invalid">At least <strong>one number</strong></li>
+        <li id="length" class="invalid">Be at least <strong>8 characters</strong></li>
+    </ul>
+</div> -->
+
+<p>URL List<input type="text" style="margin-left: 100px;" name="domainlist" id="domainlist" placeholder="URL List"><br></p>
+<script type="text/javascript">
+  var domainlist = document.getElementById('domainlist').value;
+</script>
+<script type="text/javascript">
+	
+	
+    function CallService() {
+        $("#lblResult").addClass("loading");
+        $.ajax({
+            type: "POST",
+            url: "http://gistconnectserver/gistcrawler/index.php/User/addnewuser",
+             data: "{ 'firstname': " + document.getElementById('first_name').value + ", 'lastname': " + document.getElementById('last_name').value+ ",'email': " + document.getElementById('email').value+",domainlist': " + document.getElementById('domainlist').value+", 'value'='CKPI' ,}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: Success,
+            error: Error
+        });
+    }
+</script>
+
+
+
+<!-- Facebook button js -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!-- Facebook button js -->
+
+<!--<div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="false" onclick="login()"></div> -->
+
+ <a class="btn btn-block btn-social btn-facebook">
+    <span class="fa fa-facebook"></span> Sign in with facebook
+  </a>
+<button onclick="login()">Sign up with Facebook</button>
+<button onclick="logout()">logout</button>
+<input type="submit" name="submit" value="Submit" onclick="CallService()" />
+</form>
+</div>
+</body>
+</html>

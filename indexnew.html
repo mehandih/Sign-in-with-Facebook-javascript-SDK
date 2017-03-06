@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta content="text/html; charset=US-ASCII" http-equiv="Content-Type"/>
+</head>
+<!-- Java Script Code -->
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script>
+      window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '1736082853383409',
+          xfbml      : true,
+            version    : 'v2.8'
+        });
+        FB.getLoginStatus(function(response){
+          if(response.status === 'connected'){
+            document.getElementById('status').innerHTML = 'we are connected';
+          } else if(response.status === 'not_authorized') {
+             document.getElementById('status').innerHTML = 'we are not logged in.';
+          } else {
+            document.getElementById('status').innerHTML = 'you are not logged in to Facebook';
+          }
+        });
+       FB.AppEvents.logPageView();
+    };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+      function login1(){
+        FB.login(function(response){
+          if(response.status === 'connected'){
+            
+                document.getElementById('status').innerHTML = 'we are connected';
+          } else if(response.status === 'not_authorized') {
+             document.getElementById('status').innerHTML = 'we are not logged in.';
+          } else {
+            document.getElementById('status').innerHTML = 'you are not logged in to Facebook';
+          }
+
+        });
+      }
+
+
+      function login(){
+        FB.login(function(response){
+          if(response.status === 'connected'){
+            getInfo();
+            // checkForm(this);
+            document.getElementById('status').innerHTML = 'we are connected';
+           // document.getElementById('status').style.visiblity = 'hidden';
+          } else if(response.status === 'not_authorized'){
+             document.getElementById('status').innerHTML = 'we are not logged in.';
+          } else {
+            document.getElementById('status').innerHTML = 'you are not logged in to Facebook';
+          }
+
+
+        },{'scope':'email'});
+       
+      }
+      // get user basic info
+
+      function getInfo() {
+      FB.api('/me', 'GET', {fields: 'first_name,last_name,email,picture.with(350).height(250)'}, function(response) {
+        document.getElementById('first_name').value = response.first_name;
+        document.getElementById('last_name').value = response.last_name;
+        // alert(response.email);
+         document.getElementById('email').value = response.email;       
+        //document.getElementById('status').innerHTML = "<img src='" + response.picture.data.url+"'>";
+      });
+    }
+
+    function post(){
+      FB.api('/me/feed','post', {message:'Mehandi hassan status...'}, function(response){
+        document.getElementById('status').innerHTML = response.id;
+      })
+    }
+
+    function logout(){
+      FB.logout(function(response) {
+          document.location.reload();
+        });
+    }   
+
+</script>
+
+<script>
+      $(function adduser() {
+         
+         
+          var firstname : $("#firs_tname").val();
+          var  lastname : $("#last_name").val();
+          var email : $("#email").val();
+          var  domainlist : $("#domain_list").val();
+          var  value : $("#Key").val();
+
+         
+
+          $.ajax({
+            type: 'post',
+            url: 'http://gistconnectserver/gistcrawler/index.php/User/addnewuser',
+             data: { firstname : firstname, lastname : lastname, email : email, domainlist : domainlist, value : value },
+        success: function(response) {
+            console.log(response);
+        },
+        error: function(response) {
+            console.log(response);
+        },
+            success: function (resp_obj) {
+        var returned_string = resp_obj;
+        console.log(returned_string); 
+        if (returned_string === 'REQUEST_SENT') {
+        // Registartion Request Sent Successfully
+        alert(returned_string);
+        //alert(typeof(returned_string));
+        } else if (returned_string === 'ERR_DUPLICATE_USER') {
+        // User Already Exists in System
+        alert(returned_string);
+        //alert(typeof(returned_string));
+        } else if (returned_string === 'REG_UNDER_PROCESS') {
+        // Registration Under Process
+        alert(returned_string);
+        //alert(typeof(returned_string));
+        } else if (returned_string === 'ERR_INVALID_PARAMS') {
+
+        // Invalid Parameters
+        alert('Form Data has submitted..');
+        //alert(typeof(returned_string));
+        } else if (returned_string === 'ERR_KEY') {
+        // Invalid Service Key (In this case its 'CKPI')
+        alert(returned_string);
+        //alert(typeof(returned_string));
+        } else if (returned_string === 'ERR') {
+        // Internal Server Error
+        alert(returned_string);
+       // alert(typeof(returned_string));
+        } 
+            }
+          });
+
+        });
+
+
+    </script>
+
+
+<body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+    
+
+  <form>
+   First name:
+   <br/> 
+   <input name="firstname" id="first_name"  type="text"/>
+   <br/> Last name:
+   <br/> 
+   <input name="lastname" id="last_name"  type="text"/>
+   <br/> Email:
+   <br/> 
+   <input name="email" id="email"  type="text"/>
+   <br/> List of URLs:
+   <br/> 
+   <input name="domainlist" id="domain_list" value="" type="text"/>
+   <br/> 
+   <input name="value" value="CKPI" id="Key" type="hidden"/>
+   <br/> 
+   <a class="btn btn-block btn-social btn-facebook">
+   <span class="fa fa-facebook"></span> Sign in with facebook
+   </a>
+  <!-- <input value="Submit" type="submit"/> --> 
+  <button onclick="adduser()">Submit</button>
+  </form> 
+  <div class="fb-login-button" data-max-rows="1" data-size="pinterest" data-show-faces="false" data-auto-logout-link="true"></div> 
+  <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
+ <button onclick="login()">Sign up with Facebook</button>
+ <button onclick="logout()">Log out</button>
+</body>
+</html>

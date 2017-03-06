@@ -1,0 +1,19 @@
+#container{
+	margin-left: 600px;
+	background-color: #73C6B6;
+	border: solid;
+	width: 400px;
+}
+#lable{
+margin-left: 20px;
+}
+#first_name{
+	margin-left: 56px;
+}
+#last_name{
+	margin-left: 60px;
+}
+#email{
+	margin-left: 90px;
+}
+
